@@ -4,10 +4,10 @@
 Debian’s default repositories provide you with a fast method to install Git. Note that the version you install via these repositories may be older than the newest version currently available. If you need the latest release, consider moving to the next section of this tutorial to learn how to install and compile Git from source.
 
 First, use the apt package management tools to update your local package index. With the update complete, you can download and install Git:  
-'''
-$sudo apt update
-$sudo apt install git
-'''  
+
+    $sudo apt update
+    $sudo apt install git
+  
 You can confirm that you have installed Git correctly by running the following command:
 
 g$it --version
