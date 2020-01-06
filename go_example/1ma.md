@@ -31,9 +31,9 @@
         myfmt.Println("mylib/fmt")
     }
 </pre>
-- 동일한 이름의 패키지 내용을 가져올 때 사용
+- 만약 패키지 이름이 동일하지만, 서로 다른 버젼 혹은 서로 다른 위치에서 로딩하고자 할 때는, 패키지 alias를 사용해서 구분할 수 있다.
 - 명명된 패키지가 사용되지 않으면 오류를 발생시킴
-- 참조가 필요 없는 패키지를 가져와야 할 경우 _ 이용해 패키지 이름을 다시 지정
+- 경우에 따라 패키지를 import 하면서 단지 그 패키지 안의 init() 함수만을 호출하고자 하는 케이스가 있다. 이런 경우는 패키지 import 시 _ 라는 alias 를 지정한다. 아래는 other/xlib 패키지를 호출하면서 _ alias를 지정한 예이다.
 # init
 <pre>
     func init() {
@@ -84,13 +84,21 @@
 - 소스 코드를 문서화 하자
 
 ## 의존성 관리
-- 벤더링(godep 또는 vendor)은 import 경로 재작성
-- gb 도구
-    * go 는 import 구문 때문에 재사용 가능한 빌드를 만들 수 없다는 점에 기초
-    * go get 명령이 패키지의 버젼을 가져와야 하는지 명확한 정보를 제공하지 못함
+1. 벤더링(godep 또는 vendor)은 import 경로 재작성
+2. gb 도구
 <pre>
     $PROJECT/src
-    $PROJECT/vendor/src/
+    $PROJECT/vendor/src
 </pre>
-    * import 경로를 수정 할 필요 없음.
-    
+* go 는 import 구문 때문에 재사용 가능한 빌드를 만들 수 없다는 점에 기초
+* go get 명령이 패키지의 버젼을 가져와야 하는지 명확한 정보를 제공하지 못함
+* import 경로를 수정 할 필요 없음.
+
+## go 시작하기
+* [link keyword][id]
+[id]: URL "Optional Title here"
+
+Link: [Google][googlelink]
+[googlelink]: https://google.com "Go google"
+
+* https://github.com/golang-kr/golang-doc/wiki/Go-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9E%91%EC%84%B1%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
