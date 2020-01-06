@@ -95,10 +95,5 @@
 * import 경로를 수정 할 필요 없음.
 
 ## go 시작하기
-* [link keyword][id]
-[id]: URL "Optional Title here"
-
-Link: [Google][googlelink]
-[googlelink]: https://google.com "Go google"
-
+* 코드 작성 기초 방법
 * https://github.com/golang-kr/golang-doc/wiki/Go-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9E%91%EC%84%B1%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
