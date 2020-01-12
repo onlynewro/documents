@@ -12,4 +12,4 @@
 
 5. godoc 사용위해 apt-get install golang-golang-x-tools
  
-6. 
+6. debian 패키지들은 파일 위치가 기본적으로 다른 리눅스와 다름 항상 확인 필요함
