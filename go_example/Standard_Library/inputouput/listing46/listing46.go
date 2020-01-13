@@ -17,7 +17,7 @@ func main() {
 	// 응답을 저장하기 위한 파일을 생성한다.
 	file, err := os.Create(os.Args[2])
 	if err != nil {
-		log.Fatalln("err")
+		log.Fatalln("erre")
 	}
 
 	// MultiWriter를 이용하여 한 번의 쓰기 작업으로 표준 출력장치와 파일에 같이 출력
