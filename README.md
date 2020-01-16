@@ -3,14 +3,10 @@
 1. 설치
 2. 팁
 
-## golang 
-* go 예제 및 정리
-- go_example 
+## go_example
+- 동시성
+- 표준 라이브러리
+- 테스트 및 벤치
 
-## 기타
-    1. install
-3. vc 설치 및 사용
-    1. install
-4. go 설치 및 사용
-    1. install
+## git
 

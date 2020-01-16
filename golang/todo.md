@@ -20,3 +20,17 @@
 * 유저 ID 와 그룹 ID
 ## 네트워크 프로그래밍
 ## go 자료구조
+
+## 핸들러 
+
+* type HandlerFunc
+<pre><code>
+    type HandlerFunc func(ResponseWriter, *Request)
+</code></pre>
+The HandlerFunc type is an adapter to allow the use of ordinary functions as HTTP handlers. If f is a function with the appropriate signature, HandlerFunc(f) is a Handler that calls f.
+
+* func (HandlerFunc) ServeHTTP
+<pre><code>
+func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request)
+</code></pre>
+ServeHTTP calls f(w, r).
