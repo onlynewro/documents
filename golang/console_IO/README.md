@@ -36,7 +36,7 @@
     # Read string 
         var str string
         fmt.Scan(&str)
-    </code><pre>
+    </code></pre>
     
     - Scasnln()
     <pre><code>
