@@ -1,6 +1,5 @@
-// Copyright 2014 The gocui Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// gocui, goroutine 활용
+// 업비트에서 매 초 json data를 구조체로 unmarshal 후 출력
 
 package main
 
@@ -10,8 +9,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sync"
+	"time"
 
 	"github.com/jroimartin/gocui"
+)
+
+var (
+	done = make(chan struct{})
+	wg   sync.WaitGroup
 )
 
 type Upbit_Ticker struct {
@@ -54,7 +60,7 @@ type Orderbook_unit struct {
 var Orderbook_units []Orderbook_unit
 
 type Upbit_Orderbook struct {
-	Market          string           `json:"KRW-BTC"`
+	Market          string           `json:"market"`
 	Timestamp       int64            `json:"timestamp"`
 	Total_ask_size  float32          `json:"total_ask_size"`
 	Total_bid_size  float32          `json:"total_bid_size"`
@@ -63,7 +69,56 @@ type Upbit_Orderbook struct {
 
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	if v, err := g.SetView("main", 1, 1, maxX-1, maxY-1); err != nil {
+	if k, err := g.SetView("orderbook", maxX/2+1, 1, maxX-1, maxY-1); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		k.Wrap = true
+
+		resp_a, err := http.Get("https://api.upbit.com/v1/orderbook?markets=KRW-BTC")
+		if err != nil {
+			log.Panicln(err)
+		}
+		defer resp_a.Body.Close()
+		body, err := ioutil.ReadAll(resp_a.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var Upbit_Orderbooks []Upbit_Orderbook
+
+		err = json.Unmarshal(body, &Upbit_Orderbooks)
+		if err != nil {
+			fmt.Println("error:", err)
+		}
+		fmt.Fprintf(k, "Market:%s\n", Upbit_Orderbooks[0].Market)
+		fmt.Fprintf(k, "time:%d\n", Upbit_Orderbooks[0].Timestamp)
+		fmt.Fprintf(k, "total_ask_size:%f\n", Upbit_Orderbooks[0].Total_ask_size)
+		fmt.Fprintf(k, "total_bid_size:%f\n", Upbit_Orderbooks[0].Total_bid_size)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[9].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[8].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[7].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[6].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[5].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[4].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[3].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[2].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[1].Ask_price)
+		fmt.Fprintf(k, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[0].Ask_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[1].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[2].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[3].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[4].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[5].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[6].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[7].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[8].Bid_price)
+		fmt.Fprintf(k, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[9].Bid_price)
+
+		//		fmt.Fprintf(k, "%+v", Upbit_Orderbooks)
+	}
+
+	if v, err := g.SetView("main", 1, 1, maxX/2-1, maxY-1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -113,28 +168,12 @@ func layout(g *gocui.Gui) error {
 		fmt.Fprintf(v, "lowest_52_week_price%f\n", up[0].Lowest_52_week_price)
 		fmt.Fprintf(v, "lowest_52_week_date%s\n", up[0].Lowest_52_week_date)
 		fmt.Fprintf(v, "timestamp:%d\n", up[0].Timestamp)
-
-		resp_a, err := http.Get("https://api.upbit.com/v1/orderbook?markets=KRW-BTC")
-		if err != nil {
-			log.Panicln(err)
-		}
-		defer resp_a.Body.Close()
-		body, err = ioutil.ReadAll(resp_a.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		var Upbit_Orderbooks []Upbit_Orderbook
-
-		err = json.Unmarshal(body, &Upbit_Orderbooks)
-		if err != nil {
-			fmt.Println("error:", err)
-		}
-		fmt.Fprintf(v, "%+v", Upbit_Orderbooks)
 	}
 	return nil
 }
 
 func quit(g *gocui.Gui, v *gocui.View) error {
+	close(done)
 	return gocui.ErrQuit
 }
 
@@ -151,7 +190,70 @@ func main() {
 		log.Panicln(err)
 	}
 
+	wg.Add(1)
+	go counter(g)
+
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
+	}
+	wg.Wait()
+}
+
+func counter(g *gocui.Gui) {
+	defer wg.Done()
+	var Upbit_Orderbooks []Upbit_Orderbook
+	for {
+		select {
+		case <-done:
+			return
+		case <-time.After(1000 * time.Millisecond):
+
+			g.Update(func(g *gocui.Gui) error {
+				v, err := g.View("orderbook")
+				if err != nil {
+					return err
+				}
+				v.Clear()
+				resp_a, err := http.Get("https://api.upbit.com/v1/orderbook?markets=KRW-BTC")
+				if err != nil {
+					log.Panicln(err)
+				}
+				defer resp_a.Body.Close()
+				body, err := ioutil.ReadAll(resp_a.Body)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				err = json.Unmarshal(body, &Upbit_Orderbooks)
+				if err != nil {
+					fmt.Println("error:", err)
+				}
+				fmt.Fprintf(v, "Market:%s\n", Upbit_Orderbooks[0].Market)
+				fmt.Fprintf(v, "time:%d\n", Upbit_Orderbooks[0].Timestamp)
+				fmt.Fprintf(v, "total_ask_size:%f\n", Upbit_Orderbooks[0].Total_ask_size)
+				fmt.Fprintf(v, "total_bid_size:%f\n", Upbit_Orderbooks[0].Total_bid_size)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[9].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[8].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[7].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[6].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[5].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[4].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[3].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[2].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[1].Ask_price)
+				fmt.Fprintf(v, "\033[31;1mAsk_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[0].Ask_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[1].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[2].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[3].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[4].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[5].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[6].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[7].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[8].Bid_price)
+				fmt.Fprintf(v, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[9].Bid_price)
+				return nil
+			})
+		}
 	}
 }
