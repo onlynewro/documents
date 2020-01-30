@@ -265,43 +265,94 @@ func counter(g *gocui.Gui) {
 				fmt.Fprintf(m, "\033[32;1mBid_price:%.0f\033[0m\n", Upbit_Orderbooks_eth[0].Orderbook_units[4].Bid_price)
 
 				fmt.Fprintf(m, "\033[32;1mupbit_BTCtoETH:%.6f\033[0m\n", Upbit_Orderbooks_eth[0].Orderbook_units[0].Ask_price/Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
-				fmt.Fprintf(m, "\033[32;1mupbit_ETHtoBTC:%.6f\033[0m\n", Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price/Upbit_Orderbooks[0].Orderbook_units[0].Ask_price)
+				fmt.Fprintf(v, "\033[32;1mupbit_ETHtoBTC:%.6f\033[0m\n", Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price/Upbit_Orderbooks[0].Orderbook_units[0].Ask_price)
 
+				//ETH -> polo ethbtc -> BTC 변수 선언
 				var temp, pi float64
 				var temp_1, pi_1 float64
+
+				// 1000만원 기준 eth 살 때
 				temp = float64(((10000000 / Upbit_Orderbooks_eth[0].Orderbook_units[0].Ask_price) * 0.9995) - 0.01)
 				temp_1 = float64(((10000000 / Upbit_Orderbooks[0].Orderbook_units[0].Ask_price) * 0.9995) - 0.0005)
-				fmt.Fprintf(m, "\033[31;1mupbit_btc_value:%.6f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[0].Ask_price)
-				fmt.Fprintf(m, "\033[31;1mupbit_buy_btc:%.6f\033[0m\n", temp_1)
+				fmt.Fprintf(m, "\033[31;1m이 더 리 움 가 격:%.6f\033[0m\n", Upbit_Orderbooks_eth[0].Orderbook_units[0].Ask_price)
+				fmt.Fprintf(v, "\033[31;1m비 트 코 인 가 격:%.6f\033[0m\n", Upbit_Orderbooks[0].Orderbook_units[0].Ask_price)
+				fmt.Fprintf(m, "\033[31;1m천 만 원 사 서 폴 로 로 보 낸 ETH:%.6f\033[0m\n", temp)
+				fmt.Fprintf(v, "\033[31;1m천 만 원 사 서 폴 로 로 보 낸 BTC:%.6f\033[0m\n", temp_1)
+
+				// polo eth 팔 때
 				pi, err = strconv.ParseFloat(Polo_Orderbooks.Asks[0][0].(string), 64)
 				if err != nil {
 					fmt.Println("error:", err)
 				}
+				fmt.Fprintf(m, "\033[34;1mPOLO ETH 팔 때 비 율 :%.8f\033[0m\n", pi)
+				fmt.Fprintf(m, "\033[34;1mPOLO ETH 팔 수 량 :%.8f\033[0m\n", Polo_Orderbooks.Asks[0][1].(float64))
+
+				// polo btc로 eth 살 때
 				pi_1, err = strconv.ParseFloat(Polo_Orderbooks.Bids[0][0].(string), 64)
 				if err != nil {
 					fmt.Println("error:", err)
 				}
-				temp_a := ((temp*pi)*0.9995 - 0.0005) * float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
-				temp_b := ((temp_1/pi_1)*0.9995 - 0.0005) * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
-				fmt.Fprintf(m, "\033[31;1mpolo_change:%.6f\033[0m\n", temp_b)
-				fmt.Fprintf(v, "\033[34;1mETHtoBTC:%.6f\033[0m\n", (temp_a)*0.9995)
-				fmt.Fprintf(m, "\033[34;1mBTCtoETH:%.6f\033[0m\n", (temp_b)*0.9995)
+				fmt.Fprintf(v, "\033[34;1mPOLO ETH 살 때 비 율 :%.8f\033[0m\n", pi_1)
+				fmt.Fprintf(v, "\033[34;1mPOLO ETH 살 수 량 :%.8f\033[0m\n", Polo_Orderbooks.Bids[0][1].(float64))
 
-				fmt.Fprintf(v, "ETHtoBTC_asks:%s\n", Polo_Orderbooks.Asks[0][0].(string))
-				fmt.Fprintf(v, "ETHtoBTC_value:%.6f\n", Polo_Orderbooks.Asks[0][1].(float64))
-				fmt.Fprintf(v, "BTCtoETH_bids:%s\n", Polo_Orderbooks.Bids[0][0].(string))
-				fmt.Fprintf(v, "BTCtoETH_value:%.6f\n", Polo_Orderbooks.Bids[0][1].(float64))
+				temp_a := ((temp*pi)*0.9995 - 0.0005)
+				// * float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
+				temp_b := ((temp_1/pi_1)*0.9995 - 0.0005)
+				// * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
+
+				fmt.Fprintf(m, "\033[34;1m폴 로 에 서 BTC 로 환 전:%.6f\033[0m\n", temp_a)
+				fmt.Fprintf(m, "\033[34;1m결 과 :%.6f\033[0m\n", (temp_a*float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price))-10000000)
+				fmt.Fprintf(v, "\033[34;1m폴 로 에 서 ETH 로 환 전:%.6f\033[0m\n", temp_b)
+				fmt.Fprintf(v, "\033[34;1m결 과 :%.6f\033[0m\n", (temp_b*float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price))-10000000)
+				fmt.Fprintf(v, "\033[34;1m-----------------------------\033[0m\n")
+				fmt.Fprintf(m, "\033[34;1m-----------------------------\033[0m\n")
 
 				temp = float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
-				fmt.Fprintf(m, "\033[351;1mabitis:%.6f\033[0m\n", temp)
+				fmt.Fprintf(m, "\033[351;1m일 비 트 판 가 격 :%.6f\033[0m\n", temp)
+				temp_1 = float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price) * 53
+				fmt.Fprintf(v, "\033[351;1m53 이 더 판 가 격 :%.6f\033[0m\n", temp_1)
 				temp = ((temp*0.9995)/float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Ask_price) - 0.01)
-				fmt.Fprintf(m, "\033[351;1mbuyeth:%.6f\033[0m\n", temp)
+				fmt.Fprintf(m, "\033[351;1m팔 아 서 산 ETH 갯 수 :%.6f\033[0m\n", temp)
+				temp_1 = ((temp_1*0.9995)/float64(Upbit_Orderbooks[0].Orderbook_units[0].Ask_price) - 0.0005)
+				fmt.Fprintf(v, "\033[351;1m팔 아 서 산 BTC 갯 수 :%.6f\033[0m\n", temp_1)
+
+				// 목표 값 추적 변수
+				target_temp := temp
+				target_temp_1 := temp_1
+				// 폴로에서 변환
 				temp = (temp * pi) * 0.9995
-				fmt.Fprintf(m, "\033[351;1mpolochage:%.6f\033[0m\n", temp)
-				temp = temp - 0.0005
-				fmt.Fprintf(m, "\033[351;1msendupbit:%.6f\033[0m\n", temp)
+				fmt.Fprintf(m, "\033[351;1m폴 로 에 서 변 환 :%.6f\033[0m\n", temp)
+				temp_1 = (temp_1 / pi_1) * 0.9995
+				fmt.Fprintf(v, "\033[351;1m폴 로 에 서 변 환 :%.6f\033[0m\n", temp_1)
+				var kkk_temp, kkk_temp_1 float64
+				if temp <= 1.002 {
+					kkk_temp = (1.002 - (target_temp * pi * 0.9995)) / target_temp * 0.9995
+				}
+				if temp_1 <= 53.1 {
+					kkk_temp_1 = ((53.1 * pi_1) - (target_temp_1 * 0.9995)) / 53.1
+				}
+				target_pi := pi + kkk_temp
+				target_pi_1 := pi_1 - kkk_temp_1
+				target_temp = (target_temp*target_pi)*0.9995 - 0.0005
+				target_temp_1 = (target_temp_1/target_pi_1)*0.9995 - 0.01
+				fmt.Fprintf(m, "\033[351;1m목 표 변 환 비 율 :%.8f\033[0m\n", target_temp)
+				fmt.Fprintf(m, "\033[351;1m비 율 보 정 값 :%.8f\033[0m\n", kkk_temp)
+				fmt.Fprintf(v, "\033[351;1m목 표 변 환 비 율 :%.8f\033[0m\n", target_temp_1)
+				fmt.Fprintf(v, "\033[351;1m비 율 보 정 값 :%.8f\033[0m\n", kkk_temp_1)
+
 				temp = (temp - 1) * float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
-				fmt.Fprintf(m, "\033[351;1mbenefit:%.6f\033[0m\n", temp)
+				target_temp = (target_temp - 1) * float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
+				temp_1 = (temp_1 - 54) * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
+				target_temp_1 = (target_temp_1 - 53) * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
+				fmt.Fprintf(m, "\033[351;1m보 정 없 는 수 익 :%.6f\033[0m\n", temp)
+				fmt.Fprintf(m, "\033[351;1m목 표 변 환 비 율 수 익 :%.6f\033[0m\n", target_temp)
+				fmt.Fprintf(m, "\033[351;1m보 정 없 는 변 환 비 율 :%.8f\033[0m\n", pi)
+				fmt.Fprintf(m, "\033[351;1m목 표 변 환 비 율 :%.8f\033[0m\n", target_pi)
+
+				fmt.Fprintf(v, "\033[351;1m보 정 없 는 수 익 :%.6f\033[0m\n", temp_1)
+				fmt.Fprintf(v, "\033[351;1m목 표 변 환 비 율 수 익 :%.6f\033[0m\n", target_temp_1)
+				fmt.Fprintf(v, "\033[351;1m보 정 없 는 변 환 비 율 :%.8f\033[0m\n", pi_1)
+				fmt.Fprintf(v, "\033[351;1m목 표 변 환 비 율 :%.8f\033[0m\n", target_pi_1)
 
 				return nil
 			})
