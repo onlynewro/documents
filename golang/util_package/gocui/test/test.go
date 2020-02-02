@@ -335,14 +335,14 @@ func counter(g *gocui.Gui) {
 				target_pi_1 := pi_1 - kkk_temp_1
 				target_temp = (target_temp*target_pi)*0.9995 - 0.0005
 				target_temp_1 = (target_temp_1/target_pi_1)*0.9995 - 0.01
-				fmt.Fprintf(m, "\033[351;1m목 표 변 환 비 율 :%.8f\033[0m\n", target_temp)
+				fmt.Fprintf(m, "\033[351;1m목 표 변 환 갯 수 :%.8f\033[0m\n", target_temp)
 				fmt.Fprintf(m, "\033[351;1m비 율 보 정 값 :%.8f\033[0m\n", kkk_temp)
-				fmt.Fprintf(v, "\033[351;1m목 표 변 환 비 율 :%.8f\033[0m\n", target_temp_1)
+				fmt.Fprintf(v, "\033[351;1m목 표 변 환 갯 수 :%.8f\033[0m\n", target_temp_1)
 				fmt.Fprintf(v, "\033[351;1m비 율 보 정 값 :%.8f\033[0m\n", kkk_temp_1)
 
 				temp = (temp - 1) * float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
 				target_temp = (target_temp - 1) * float64(Upbit_Orderbooks[0].Orderbook_units[0].Bid_price)
-				temp_1 = (temp_1 - 54) * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
+				temp_1 = (temp_1 - 53) * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
 				target_temp_1 = (target_temp_1 - 53) * float64(Upbit_Orderbooks_eth[0].Orderbook_units[0].Bid_price)
 				fmt.Fprintf(m, "\033[351;1m보 정 없 는 수 익 :%.6f\033[0m\n", temp)
 				fmt.Fprintf(m, "\033[351;1m목 표 변 환 비 율 수 익 :%.6f\033[0m\n", target_temp)
