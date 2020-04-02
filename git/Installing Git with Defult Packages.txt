@@ -1,7 +1,9 @@
-# Git 기본 설치
+## Git 기본 설치
 
+```shell
 $sudo apt update
 $sudo apt install git
+```
 
 cd git-*
 Now, you can make the package and install it by typing these two commands:
