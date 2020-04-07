@@ -10,14 +10,27 @@
     - 설정 -> 지역 및 언어 -> 입력 소스 에서 한국어(hangul) 을 추가 첫번째 입력소스롤 선택
     - 단축키 설정 후 shift + space 로 한영 전환이 가능하다.
 
-* home안에 디렉토리들의 한글명을 영어로 전환
+### home안에 디렉토리들의 한글명을 영어로 전환
     - terminal 에서 입력
     ```shell
         $lang=C
         $xdg-user-dirs-gdk-update
     ```
 
-## 초기 상태 백업
+### 초기 상태 백업
 * timeshift 설치 후 상태 저장하면 에러 및 꼬인 상태를 쉽게 되돌릴 수 있음.(강추)
 
+### fusuma touchpad 설정
+
+<https://github.com/iberianpig/fusuma>
+- xdotool은 wayland,x11,xorg 중 지원이 안될 수 있음
+- 일부 설정은 플러그인을 설치해야 함
+
+### 윈도우 글꼴 사용하기
+윈도우 폰트 폴더에서 필요한 폰트를 복사
+```shell
+sudo cp *.* /usr/share/fonts 
+sudo fc-cache -fc  
+```
+super + a(모든프로그램보기) -> 기능개선 -> 글꼴 -> 해당폰트 선택
 
