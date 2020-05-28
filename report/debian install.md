@@ -1,7 +1,14 @@
-# debain install
-## usb install 만들기
-* https://www.debian.org/distrib/ 에서 내려 받기
-* iso 이미지를 usb에 부팅가능한 상태로 만들고 usb 우선 부팅
+# 데비안(debian) 설치하기
+ 쉬운 설치 방법 안내
+
+## 데비안 설치 전 준비물 및 알아야 할 사항
+ 데비안을 설치전 
+### 필요한 물품
+* usb 메모리
+* 설치할 데비안을 usb에 쓰기위한 컴퓨터 
+* https://www.debian.org/distrib/ 에서 iso 내려 받기
+* iso 이미지를 usb에 설치 
+* usb 우선 부팅으로 변경
 * 그래픽 설치 및 기본 설치하면 거이 자동으로 다 설치됨
 * 온보드가 아닌 nvidia 그래픽카드를 쓴다면 카드의 종류마다 설치과정이 다를 수 있다.
 
