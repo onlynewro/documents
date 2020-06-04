@@ -1,3 +1,9 @@
+#### residual config 삭제
+- 필요없는 프로그램의 설정파일을 다 지움
+```shell
+apt purge $(dpkg -l | grep '^rc' | awk '{print $2}')
+```
+
 #### bash 단축키
 ctrl + r : 히스토리 찾기
 
@@ -12,12 +18,8 @@ $ cat /usr/sbin/update-grub | grep grub-mkconfig
 $ exec /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg "$@"
 ```
 
-#### 노트북 파워모니터링 앱
-```shell
-$ /usr/sbin/powertop 실행
-```
-
-#### tlp - 노트북 베터리 절약 설정 앱
+#### 터미널 환경에서 유용하게 쓰이는 mc
+- ctrl + o : 평소 화면을 볼 수 있다. 한번 더 누르면 mc로 돌아온다.
 
 #### godoc 사용위해 apt-get install golang-golang-x-tools
  
