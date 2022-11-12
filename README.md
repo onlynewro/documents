@@ -28,4 +28,7 @@ go 언어의 정리 및 예제
 * cli
 * gui
 
+this is test
+this is raspi test
+this is vscode test
 
