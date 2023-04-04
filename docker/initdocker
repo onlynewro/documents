@@ -1,0 +1,5 @@
+# Dockerfile build image
+docker build -t myapp .
+
+# 컨테이너에서 코드 테스트
+docker run -it -v $(pwd):/app my-image /bin/bash
